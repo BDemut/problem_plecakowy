@@ -1,15 +1,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "Przedmiot.h"
+#include "aw.h"
 
-class Przedmiot
-{
-public:
-	int rozmiar = 0;
-	int wartosc = 0;
-};
-
-int getint(int min = 1, int max = INT_MAX)
+int Getint(int min = 1, int max = INT_MAX)
 {
 	int n;
 	std::string smieci;
@@ -28,14 +23,26 @@ int getint(int min = 1, int max = INT_MAX)
 	return n;
 }
 
+void Czytaj(std::vector<bool> wynik)
+{
+	std::cout << "Uzyte przedmioty: ";
+	for (int i{ 0 }; i < wynik.size(); i++)
+	{
+		if (wynik[i])
+			std::cout << i + 1 << ' ';
+	}
+	std::cout << '\n';
+}
+
 int main()
 {
-	int n{ 0 };
-	int c{ 0 };
-	Przedmiot* listaP;
-	bool kontynuuj{ true };
+	int liczbaP{ 0 };
+	int pojemnosc{ 0 };
+	Przedmiot* listaP = nullptr;
 	std::ifstream plik;
+	//std::vector<bool> wynik;
 
+	bool kontynuuj{ true };
 	while (kontynuuj)
 	{
 		std::cout << "Sposob wczytania danych:\n1 - z klawiatury\n2 - z pliku\n";
@@ -45,29 +52,30 @@ int main()
 		{
 		case '1':
 			std::cout << "Podaj liczbe przedmiotow: ";
-			n = getint();
-			listaP = new Przedmiot[n];
+			liczbaP = Getint();
+			listaP = new Przedmiot[liczbaP];
 			std::cout << "Podaj pojemnosc plecaka: ";
-			c = getint();
-			for (int i{ 0 }; i < n; i++)
+			pojemnosc = Getint();
+			for (int i{ 0 }; i < liczbaP; i++)
 			{
-				std::cout << "Rozmiar przedmiotu " << i << " : ";
-				listaP[i].rozmiar = getint();
-				std::cout << "Wartosc przedmiotu " << i << " : ";
-				listaP[i].wartosc = getint();
+				std::cout << "Rozmiar przedmiotu " << i + 1 << " : ";
+				listaP[i].rozmiar = Getint();
+				std::cout << "Wartosc przedmiotu " << i + 1 << " : ";
+				listaP[i].wartosc = Getint();
 			}
+			break;
 		case '2':
 			plik.open("dane.txt");
 			if (plik)
 			{
-				plik >> n >> c;
+				plik >> liczbaP >> pojemnosc;
 				if (plik.fail())
 				{
 					std::cout << "Bledne dane w pliku!\n";
 					continue;
 				}
-				listaP = new Przedmiot[n];
-				for (int i{ 0 }; i < n; i++)
+				listaP = new Przedmiot[liczbaP];
+				for (int i{ 0 }; i < liczbaP; i++)
 				{
 					plik >> listaP[i].rozmiar >> listaP[i].wartosc;
 					if (plik.fail())
@@ -95,8 +103,10 @@ int main()
 			switch (w)
 			{
 			case '1':
+				std::cout << sizeof(long);
 			case '2':
 			case '3':
+				Czytaj(AWyczerpujacy(listaP, liczbaP, pojemnosc));
 			case '4':
 				kontynuuj2 = false;
 				break;
