@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aisd5", "aisd5\aisd5.vcxproj", "{364C64A5-074D-4D3F-BF69-2F39BF990622}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Debug|x64.ActiveCfg = Debug|x64
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Debug|x64.Build.0 = Debug|x64
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Debug|x86.ActiveCfg = Debug|Win32
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Debug|x86.Build.0 = Debug|Win32
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Release|x64.ActiveCfg = Release|x64
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Release|x64.Build.0 = Release|x64
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Release|x86.ActiveCfg = Release|Win32
+		{364C64A5-074D-4D3F-BF69-2F39BF990622}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0079703-4876-4B61-B23F-28F32F225FE9}
+	EndGlobalSection
+EndGlobal
