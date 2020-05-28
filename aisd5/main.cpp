@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Przedmiot.h"
 #include "aw.h"
+#include "az.h"
 
 int Getint(int min = 1, int max = INT_MAX)
 {
@@ -104,9 +105,13 @@ int main()
 			{
 			case '1':
 				std::cout << sizeof(long);
+				break;
 			case '2':
+				Czytaj(AZachlanny(listaP, liczbaP, pojemnosc));
+				break;
 			case '3':
 				Czytaj(AWyczerpujacy(listaP, liczbaP, pojemnosc));
+				break;
 			case '4':
 				kontynuuj2 = false;
 				break;

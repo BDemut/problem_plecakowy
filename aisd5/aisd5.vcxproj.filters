@@ -21,12 +21,18 @@
     <ClCompile Include="aw.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="az.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Przedmiot.h">
       <Filter>Pliki zasobów</Filter>
     </ClInclude>
     <ClInclude Include="aw.h">
+      <Filter>Pliki zasobów</Filter>
+    </ClInclude>
+    <ClInclude Include="az.h">
       <Filter>Pliki zasobów</Filter>
     </ClInclude>
   </ItemGroup>
