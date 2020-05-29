@@ -1,6 +1,5 @@
 #include "Przedmiot.h"
 #include <vector>
-#include <cmath>
 
 std::vector<bool> AWyczerpujacy(const Przedmiot* const listaP, const int liczbaP, const int pojemnosc)
 {
@@ -13,7 +12,8 @@ std::vector<bool> AWyczerpujacy(const Przedmiot* const listaP, const int liczbaP
 	for (int i{ 0 }; i < liczbaP; i++)
 		maxI *= 2;
 
-	for (unsigned long long i{ 0 }; i < maxI; i++)
+	maxI -= 1;
+	for (unsigned long long i{ 0 }; i <= maxI; i++)
 	{
 		unsigned long long bity = i;
 		int rozmiar = 0;

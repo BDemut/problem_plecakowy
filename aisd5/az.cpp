@@ -1,13 +1,12 @@
 #include "Przedmiot.h"
 #include <vector>
 #include <algorithm>
-#include <iostream>
 
 struct PrzedmiotZ
 {
 	Przedmiot przedmiot;
-	int id;
-	double wsp;
+	int id = 0;
+	double wsp = 0;
 };
 
 bool PorownanieWspolczynnikow(PrzedmiotZ wiekszy, PrzedmiotZ mniejszy) {return wiekszy.wsp > mniejszy.wsp;}

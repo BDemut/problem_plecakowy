@@ -4,6 +4,16 @@
 #include "Przedmiot.h"
 #include "aw.h"
 #include "az.h"
+#include "apd.h"
+
+void Clear()
+{
+#if defined _WIN32
+	system("cls");
+#elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
+	system("clear");
+#endif
+}
 
 int Getint(int min = 1, int max = INT_MAX)
 {
@@ -24,15 +34,21 @@ int Getint(int min = 1, int max = INT_MAX)
 	return n;
 }
 
-void Czytaj(std::vector<bool> wynik)
+void Czytaj(std::vector<bool> wynik, const Przedmiot* const listaP)
 {
 	std::cout << "Uzyte przedmioty: ";
-	for (int i{ 0 }; i < wynik.size(); i++)
+	int wartosc = 0;
+	int rozmiar = 0;
+	for (unsigned int i{ 0 }; i < wynik.size(); i++)
 	{
 		if (wynik[i])
+		{
 			std::cout << i + 1 << ' ';
+			wartosc += listaP[i].wartosc;
+			rozmiar += listaP[i].rozmiar;
+		}
 	}
-	std::cout << '\n';
+	std::cout << "\nWartosc przedmiotow: " << wartosc << "\nRozmiar przedmiotow: " << rozmiar << '\n';
 }
 
 int main()
@@ -41,7 +57,6 @@ int main()
 	int pojemnosc{ 0 };
 	Przedmiot* listaP = nullptr;
 	std::ifstream plik;
-	//std::vector<bool> wynik;
 
 	bool kontynuuj{ true };
 	while (kontynuuj)
@@ -104,20 +119,27 @@ int main()
 			switch (w)
 			{
 			case '1':
-				std::cout << sizeof(long);
+				Czytaj(AProgDynamicznego(listaP, liczbaP, pojemnosc), listaP);
 				break;
 			case '2':
-				Czytaj(AZachlanny(listaP, liczbaP, pojemnosc));
+				Czytaj(AZachlanny(listaP, liczbaP, pojemnosc), listaP);
 				break;
 			case '3':
-				Czytaj(AWyczerpujacy(listaP, liczbaP, pojemnosc));
+				Czytaj(AWyczerpujacy(listaP, liczbaP, pojemnosc), listaP);
 				break;
 			case '4':
 				kontynuuj2 = false;
+				
+				Clear();
+				delete[] listaP;
+				listaP = nullptr;
 				break;
 			case '5':
 				kontynuuj2 = false;
 				kontynuuj = false;
+
+				delete[] listaP;
+				listaP = nullptr;
 				break;
 			}
 		}
