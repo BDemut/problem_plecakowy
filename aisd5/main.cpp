@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <random>
+#include <chrono>
 #include "Przedmiot.h"
 #include "aw.h"
 #include "az.h"
@@ -53,95 +55,118 @@ void Czytaj(std::vector<bool> wynik, const Przedmiot* const listaP)
 
 int main()
 {
-	int liczbaP{ 0 };
-	int pojemnosc{ 0 };
-	Przedmiot* listaP = nullptr;
-	std::ifstream plik;
+	srand(time(0));
 
-	bool kontynuuj{ true };
-	while (kontynuuj)
+	const int liczbyP[] = { 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25 };
+	const int liczbyP_size = 11;
+
+	const int pojemnosci[] = { 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25 };
+	const int pojemnosci_size = 11;
+	const int b = 5;
+
+	const int liczba_pomiarow = 5;
+	const int ZAKRESROZMIAR = 30;
+	const int ZAKRESWARTOSC = 30;
+	std::ofstream wynik("wynik.txt");
+
+	double pomiaryAW[liczba_pomiarow][pojemnosci_size][liczbyP_size];
+	double pomiaryAZ[liczba_pomiarow][pojemnosci_size][liczbyP_size];
+	bool optymalneAZ[liczba_pomiarow][pojemnosci_size][liczbyP_size];
+	double pomiaryAPD[liczba_pomiarow][pojemnosci_size][liczbyP_size];
+
+	Przedmiot* listaP = nullptr;
+	for (int x{ 0 }; x < liczba_pomiarow; x++)
 	{
-		std::cout << "Sposob wczytania danych:\n1 - z klawiatury\n2 - z pliku\n";
-		char w;
-		std::cin >> w;
-		switch (w)
+		for (int xx{ 0 }; xx < pojemnosci_size; xx++)
 		{
-		case '1':
-			std::cout << "Podaj liczbe przedmiotow: ";
-			liczbaP = Getint();
-			listaP = new Przedmiot[liczbaP];
-			std::cout << "Podaj pojemnosc plecaka: ";
-			pojemnosc = Getint();
-			for (int i{ 0 }; i < liczbaP; i++)
+			int pojemnosc = pojemnosci[xx];
+			for (int xxx{ 0 }; xxx < liczbyP_size; xxx++)
 			{
-				std::cout << "Rozmiar przedmiotu " << i + 1 << " : ";
-				listaP[i].rozmiar = Getint();
-				std::cout << "Wartosc przedmiotu " << i + 1 << " : ";
-				listaP[i].wartosc = Getint();
-			}
-			break;
-		case '2':
-			plik.open("dane.txt");
-			if (plik)
-			{
-				plik >> liczbaP >> pojemnosc;
-				if (plik.fail())
-				{
-					std::cout << "Bledne dane w pliku!\n";
-					continue;
-				}
+				std::cout << "x:" << x << " xx:" << xx << " xxx:" << xxx << '\n';
+				int liczbaP = liczbyP[xxx];
 				listaP = new Przedmiot[liczbaP];
 				for (int i{ 0 }; i < liczbaP; i++)
 				{
-					plik >> listaP[i].rozmiar >> listaP[i].wartosc;
-					if (plik.fail())
-					{
-						std::cout << "Bledne dane w pliku!\n";
-						continue;
-					}
+					listaP[i].rozmiar = (rand() % pojemnosc) + 1;
+					listaP[i].wartosc = (rand() % pojemnosc) + 1;
 				}
-			}
-			else
-				std::cout << "Brak pliku \"dane.txt\"!\n";
-			plik.close();
-			break;
-		default:
-			std::cout << "Podano nieprawidlowy znak!\n";
-			continue;
-		}
-		bool kontynuuj2{ true };
-		while (kontynuuj2)
-		{
-			std::cout << "Wybierz algorytm:\n1 - algorytm programowania dynamicznego\n";
-			std::cout << "2 - algorytm zachlanny\n3 - algorytm wyczerpujacy\n4 - wprowadzenie nowych danych\n5 - wyjscie z programu\n";
-			char w;
-			std::cin >> w;
-			switch (w)
-			{
-			case '1':
-				Czytaj(AProgDynamicznego(listaP, liczbaP, pojemnosc), listaP);
-				break;
-			case '2':
-				Czytaj(AZachlanny(listaP, liczbaP, pojemnosc), listaP);
-				break;
-			case '3':
-				Czytaj(AWyczerpujacy(listaP, liczbaP, pojemnosc), listaP);
-				break;
-			case '4':
-				kontynuuj2 = false;
-				
-				Clear();
-				delete[] listaP;
-				listaP = nullptr;
-				break;
-			case '5':
-				kontynuuj2 = false;
-				kontynuuj = false;
+
+				auto start = std::chrono::steady_clock::now();
+				auto apdwynik = AProgDynamicznego(listaP, liczbaP, pojemnosc);
+				auto end = std::chrono::steady_clock::now();
+
+				std::chrono::duration<double> elapsed{ end - start };
+				pomiaryAPD[x][xx][xxx] = elapsed.count();
+
+				start = std::chrono::steady_clock::now();
+				auto azwynik = AZachlanny(listaP, liczbaP, pojemnosc);
+				end = std::chrono::steady_clock::now();
+
+				elapsed = end - start;
+				pomiaryAZ[x][xx][xxx] = elapsed.count();
+
+				start = std::chrono::steady_clock::now();
+				AWyczerpujacy(listaP, liczbaP, pojemnosc);
+				end = std::chrono::steady_clock::now();
+
+				elapsed = end - start;
+				pomiaryAW[x][xx][xxx] = elapsed.count();
+
+				optymalneAZ[x][xx][xxx] = apdwynik == azwynik ? true : false;
 
 				delete[] listaP;
 				listaP = nullptr;
-				break;
 			}
 		}
+	}
+
+	double srAPD[pojemnosci_size][liczbyP_size];
+	double srAZ[pojemnosci_size][liczbyP_size];
+	double srAW[pojemnosci_size][liczbyP_size];
+
+	for (int xx{ 0 }; xx < pojemnosci_size; xx++)
+	{
+		for (int xxx{ 0 }; xxx < liczbyP_size; xxx++)
+		{
+			srAPD[xx][xxx] = 0;
+			srAZ[xx][xxx] = 0;
+			srAW[xx][xxx] = 0;
+			int dzielnikAZ = 0;
+			for (int x{ 0 }; x < liczba_pomiarow; x++)
+			{
+				srAPD[xx][xxx] += pomiaryAPD[x][xx][xxx];
+				if (optymalneAZ[x][xx][xxx])
+				{
+					srAZ[xx][xxx] += pomiaryAZ[x][xx][xxx];
+					dzielnikAZ += 1;
+				}
+				srAW[xx][xxx] += pomiaryAW[x][xx][xxx];
+			}
+			srAPD[xx][xxx] /= liczba_pomiarow;
+			srAZ[xx][xxx] /= dzielnikAZ;
+			srAW[xx][xxx] /= liczba_pomiarow;
+		}
+	}
+
+	wynik << "\n\tAPD:\n";
+	for (int xx{ 0 }; xx < pojemnosci_size; xx++)
+	{
+		wynik << "Pojemnosc " << pojemnosci[xx] << '\n';
+		for (int xxx{ 0 }; xxx < liczbyP_size; xxx++)
+			wynik << srAPD[xx][xxx] << '\n';
+	}
+	wynik << "\n\tAZ:\n";
+	for (int xx{ 0 }; xx < pojemnosci_size; xx++)
+	{
+		wynik << "Pojemnosc " << pojemnosci[xx] << '\n';
+		for (int xxx{ 0 }; xxx < liczbyP_size; xxx++)
+			wynik << srAZ[xx][xxx] << '\n';
+	}
+	wynik << "\n\tAW:\n";
+	for (int xx{ 0 }; xx < pojemnosci_size; xx++)
+	{
+		wynik << "Pojemnosc " << pojemnosci[xx] << '\n';
+		for (int xxx{ 0 }; xxx < liczbyP_size; xxx++)
+			wynik << srAW[xx][xxx] << '\n';
 	}
 }
