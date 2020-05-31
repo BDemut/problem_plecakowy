@@ -142,12 +142,14 @@
     <ClCompile Include="apd.cpp" />
     <ClCompile Include="aw.cpp" />
     <ClCompile Include="az.cpp" />
+    <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="apd.h" />
     <ClInclude Include="aw.h" />
     <ClInclude Include="az.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="Przedmiot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -5,6 +5,7 @@
 #include "aw.h"
 #include "az.h"
 #include "apd.h"
+#include "input.h"
 
 void Clear()
 {
@@ -13,25 +14,6 @@ void Clear()
 #elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
 	system("clear");
 #endif
-}
-
-int Getint(int min = 1, int max = INT_MAX)
-{
-	int n;
-	std::string smieci;
-	do
-	{
-		std::cin >> n;
-		std::cin.putback('0');
-		std::cin >> smieci;
-		if (std::cin.fail() || n < min || n > max || smieci != "0")
-		{
-			std::cin.clear();
-			std::cout << "Podaj liczbe calkowita pomiedzy " << min << " a " << max << ": ";
-		}
-		std::cin.ignore(32767, '\n');
-	} while (std::cin.fail() || n < min || n > max || smieci != "0");
-	return n;
 }
 
 void Czytaj(std::vector<bool> wynik, const Przedmiot* const listaP)
@@ -62,8 +44,7 @@ int main()
 	while (kontynuuj)
 	{
 		std::cout << "Sposob wczytania danych:\n1 - z klawiatury\n2 - z pliku\n";
-		char w;
-		std::cin >> w;
+		char w{ Getchar("12") };
 		switch (w)
 		{
 		case '1':
@@ -106,16 +87,14 @@ int main()
 			plik.close();
 			break;
 		default:
-			std::cout << "Podano nieprawidlowy znak!\n";
-			continue;
+			throw "getchar nie dziala ;(";
 		}
 		bool kontynuuj2{ true };
 		while (kontynuuj2)
 		{
 			std::cout << "Wybierz algorytm:\n1 - algorytm programowania dynamicznego\n";
 			std::cout << "2 - algorytm zachlanny\n3 - algorytm wyczerpujacy\n4 - wprowadzenie nowych danych\n5 - wyjscie z programu\n";
-			char w;
-			std::cin >> w;
+			w = Getchar("12345");
 			switch (w)
 			{
 			case '1':
@@ -141,6 +120,8 @@ int main()
 				delete[] listaP;
 				listaP = nullptr;
 				break;
+			default:
+				throw "getchar nie dziala ;(";
 			}
 		}
 	}
